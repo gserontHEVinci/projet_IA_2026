@@ -7,7 +7,7 @@
     "frontend"
   ],
   "engines": {
-    "node": ">=24"
+    "node": ">=22.14.0"
   },
   "scripts": {
     "setup": "npm run setup -w backend && npm run db:init",

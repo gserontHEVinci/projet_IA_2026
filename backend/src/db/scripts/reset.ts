@@ -1,4 +1,5 @@
 // npm run db:reset : supprime la base locale puis la recrée avec les données de démonstration.
+import "../../requireSupportedNode.ts";
 import { rmSync } from "node:fs";
 import { DATABASE_PATH } from "../../config.ts";
 import { initializeDatabase } from "../initialize.ts";

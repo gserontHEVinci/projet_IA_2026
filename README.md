@@ -10,9 +10,16 @@ les fonctionnalités métier listées plus bas sont à développer.
 
 ## Prérequis
 
-- Node.js 24 (version indiquée dans `.nvmrc`) et npm
+- Node.js 22.14 ou plus récent, avec npm : Node 24 LTS recommandé ; Node 22 et 26
+  conviennent aussi. Si une autre version est déjà installée, essayez d'abord : le projet
+  vous préviendra clairement si une mise à jour est nécessaire.
 - Git
 - Recommandé : Visual Studio Code avec l'extension REST Client, pour les fichiers `backend/http/*.http`
+
+Aucun autre outil n'est nécessaire : ni Python, ni Visual Studio, ni compilateur. En
+installant Node.js sous Windows, **ne cochez pas** la case qui propose d'installer les
+« outils pour les modules natifs » (Chocolatey, Python, Visual Studio Build Tools) : elle
+est inutile pour ce projet et télécharge plusieurs gigaoctets.
 
 ## Démarrage
 
@@ -26,6 +33,10 @@ npm run dev
 
 - `npm ci` installe exactement les versions enregistrées dans `package-lock.json`, sans le
   modifier. Utilisez `npm install <paquet>` seulement pour ajouter une dépendance.
+- Le fichier `.npmrc` empêche les dépendances d'exécuter des scripts à l'installation
+  (`ignore-scripts=true`). Sans lui, npm tenterait de compiler better-sqlite3, ce qui
+  exigerait Python et Visual Studio, alors que le paquet contient déjà ses versions
+  précompilées pour Windows, macOS et Linux.
 - `npm run setup` crée `backend/.env` (avec une clé de signature aléatoire) puis la base de
   données avec les données de démonstration. Il suffit de le lancer une fois.
 - `npm run dev` démarre l'API sur http://localhost:3000 et l'application sur
@@ -64,7 +75,7 @@ Les outils ont été choisis pour rester simples et lisibles :
 
 | Choix | Pourquoi |
 |---|---|
-| SQLite avec `better-sqlite3` et SQL écrit à la main | Aucun serveur de base à installer ; requêtes visibles dans les repositories, sans ORM à apprendre |
+| SQLite avec `better-sqlite3` et SQL écrit à la main | Aucun serveur de base à installer (binaires précompilés, rien à compiler) ; requêtes visibles dans les repositories, sans ORM à apprendre |
 | Migrations en fichiers `.sql` | Le schéma se lit directement ; une évolution est un nouveau fichier |
 | Validation par type guards écrits à la main | Pratique du cours, sans bibliothèque supplémentaire |
 | React Router, CSS simple | Pas de bibliothèque d'interface : moins de code et de contexte à explorer |
@@ -117,6 +128,18 @@ remplacée par un **mode démo** : on choisit un utilisateur fictif, **sans mot 
 ## Dépannage
 
 **« JWT_SECRET absent ou trop court »** : lancez `npm run setup`.
+
+**« Node … est trop ancien pour ce projet »** au démarrage : mettez Node à jour (Node 24 LTS,
+ou au minimum 22.14). Pour un Node 22 déjà installé, il suffit d'installer la dernière
+version 22 par-dessus.
+
+**Avertissement `EBADENGINE` pendant `npm ci`** : sans conséquence si l'installation se
+termine. Certaines dépendances déclarent ne pas soutenir officiellement votre version de
+Node (par exemple 23 ou 25) ; le projet fonctionne quand même.
+
+**Une nouvelle dépendance ne fonctionne pas après son installation** : à cause de
+`ignore-scripts=true` (voir « Démarrage »), ses scripts d'installation n'ont pas été
+exécutés. C'est rare ; sa documentation indique alors la commande à lancer à la main.
 
 **« Cannot find native binding » ou « @esbuild/… could not be found »** : un bug connu de
 npm ([npm/cli#4828](https://github.com/npm/cli/issues/4828)) retire parfois des binaires

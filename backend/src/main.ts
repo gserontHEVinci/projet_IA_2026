@@ -1,3 +1,4 @@
+import "./requireSupportedNode.ts";
 import { createApp } from "./app.ts";
 import { API_PORT, DATABASE_PATH, loadAuthConfig } from "./config.ts";
 import { initializeDatabase } from "./db/initialize.ts";
